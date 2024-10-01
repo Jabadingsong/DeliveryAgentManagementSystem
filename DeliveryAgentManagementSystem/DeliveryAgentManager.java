@@ -58,6 +58,18 @@ public class DeliveryAgentManager
         return agents;
     }
 
+    // Display agents with index starting from 1
+    public void displayAgents() 
+    {
+        System.out.println("Current Agents:");
+        for (int i = 0; i < agents.size(); i++) 
+        {
+            DeliveryAgent agent = agents.get(i);
+            // Display index starting from 1
+            System.out.println((i + 1) + ": " + agent.getName() + " - " + agent.getVehicleType() + " - " + agent.getGoods());
+        }
+    }
+
     // Save agents to CSV
     public void saveToCSV(String filePath) 
     {

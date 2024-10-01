@@ -11,6 +11,7 @@
  *   (e.g., bike, motorcycle, car, van, truck).
  * - availability: A boolean indicating whether the agent is currently available for deliveries.
  * - id: The unique identifier for the delivery agent, starting from 1.
+ * - goods: A string representing the type of goods the agent delivers.
  * 
  * Methods:
  * - Getters and setters are used to ensure encapsulation, allowing for controlled 
@@ -19,6 +20,7 @@
  * - fromCSV: A static method that allows for the creation of a DeliveryAgent object 
  *   from a CSV line, facilitating CSV imports.
  */
+
 public class DeliveryAgent 
 {
     private int id; // ID will be assigned during the CSV write process
@@ -26,14 +28,16 @@ public class DeliveryAgent
     private String contactNumber;
     private String vehicleType;
     private boolean availability;
+    private String goods; // New attribute for the type of goods delivered
 
     // Constructor
-    public DeliveryAgent(String name, String contactNumber, String vehicleType, boolean availability) 
+    public DeliveryAgent(String name, String contactNumber, String vehicleType, boolean availability, String goods) 
     {
         this.name = name;
         this.contactNumber = contactNumber;
         this.vehicleType = vehicleType;
         this.availability = availability;
+        this.goods = goods; // Initialize goods
     }
 
     // Getters and setters for encapsulation
@@ -87,17 +91,27 @@ public class DeliveryAgent
         this.id = id;
     }
 
+    public String getGoods() // New getter for goods
+    {
+        return goods;
+    }
+
+    public void setGoods(String goods) // New setter for goods
+    {
+        this.goods = goods;
+    }
+
     // Method to convert to CSV format
     public String toCSV() 
     {
-        return id + "," + name + "," + contactNumber + "," + vehicleType + "," + availability;
+        return id + "," + name + "," + contactNumber + "," + vehicleType + "," + availability + "," + goods;
     }
 
     // Static method to create an agent from CSV
     public static DeliveryAgent fromCSV(String csvLine) 
     {
         String[] fields = csvLine.split(",");
-        DeliveryAgent agent = new DeliveryAgent(fields[1], fields[2], fields[3], Boolean.parseBoolean(fields[4]));
+        DeliveryAgent agent = new DeliveryAgent(fields[1], fields[2], fields[3], Boolean.parseBoolean(fields[4]), fields[5]); // Include goods
         agent.setId(Integer.parseInt(fields[0])); // Set the ID from the CSV
         return agent;
     }

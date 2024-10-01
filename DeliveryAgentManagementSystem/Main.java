@@ -143,8 +143,13 @@ public class Main
             }
         }
 
-        return new DeliveryAgent(name, contactNumber, vehicleType, availability);
+        System.out.print("Enter goods delivered by the agent: "); // Prompt for goods
+        String goods = scanner.nextLine(); // Get the goods input
+
+        // Pass the goods parameter to the DeliveryAgent constructor
+        return new DeliveryAgent(name, contactNumber, vehicleType, availability, goods);
     }
+
 
     // Method to validate and get a valid index for update/delete operations
     private static int getValidIndex(Scanner scanner, int size) 
