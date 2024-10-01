@@ -25,19 +25,21 @@ import java.util.List;
 public class CSVUtils 
 {
 
-    // Write agents to a CSV file
-    public static void writeToCSV(String filePath, List<DeliveryAgent> agents) 
-    {
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter(filePath))) 
-        {
-            for (DeliveryAgent agent : agents) 
-            {
-                writer.write(agent.toCSV());
+    // Write agents to a CSV file with headers
+    public static void writeToCSV(String filePath, List<DeliveryAgent> agents) {
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(filePath))) {
+            // Write the header first
+            writer.write("ID,Name,Contact Number,Vehicle Type,Availability");
+            writer.newLine();
+            
+            // Write each agent's information
+            int id = 1;  // Start ID from 1
+            for (DeliveryAgent agent : agents) {
+                writer.write(id + "," + agent.toCSV());
                 writer.newLine();
+                id++;
             }
-        } 
-        catch (IOException e) 
-        {
+        } catch (IOException e) {
             System.out.println("Error writing to CSV: " + e.getMessage());
         }
     }
