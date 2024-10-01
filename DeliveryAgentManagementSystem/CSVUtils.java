@@ -1,65 +1,63 @@
 /**
- * The CSVUtils class provides utility methods for reading and writing delivery agents 
- * to and from CSV files. This ensures persistence of agent data between program sessions.
+ * The CSVUtils class provides utility methods for reading and writing 
+ * delivery agent data to and from a CSV file.
  * 
- * Key Methods:
- * - writeToCSV: Writes the list of delivery agents to a specified CSV file, handling potential
- *   I/O exceptions and ensuring that data is saved properly.
- * - readFromCSV: Reads delivery agent data from a CSV file, creating DeliveryAgent objects 
- *   from each line and returning a list of agents.
+ * Key functionality:
+ * - writeToCSV: Writes a list of DeliveryAgent objects to a CSV file,
+ *   including a header line for better organization when viewed in Excel.
+ * - readFromCSV: Reads a CSV file and converts each line back into 
+ *   DeliveryAgent objects for use in the application.
  * 
- * Exception Handling:
- * - Both methods include error handling to ensure the program continues to run
- *   smoothly in case of file I/O errors. Errors are logged to the console, giving
- *   the user insights into any issues that occur during file operations.
+ * This separation of concerns allows for cleaner code and easier maintenance.
  */
-
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 
 public class CSVUtils 
 {
-
-    // Write agents to a CSV file with headers
-    public static void writeToCSV(String filePath, List<DeliveryAgent> agents) {
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter(filePath))) {
-            // Write the header first
+    // Method to write a list of agents to a CSV file
+    public static void writeToCSV(String filePath, List<DeliveryAgent> agents) 
+    {
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(filePath))) 
+        {
             writer.write("ID,Name,Contact Number,Vehicle Type,Availability");
             writer.newLine();
-            
-            // Write each agent's information
-            int id = 1;  // Start ID from 1
-            for (DeliveryAgent agent : agents) {
-                writer.write(id + "," + agent.toCSV());
+
+            for (DeliveryAgent agent : agents) 
+            {
+                writer.write(agent.toCSV());
                 writer.newLine();
-                id++;
             }
-        } catch (IOException e) {
+        } 
+        catch (IOException e) 
+        {
             System.out.println("Error writing to CSV: " + e.getMessage());
         }
     }
 
-    // Read agents from a CSV file
+    // Method to read agents from a CSV file
     public static List<DeliveryAgent> readFromCSV(String filePath) 
     {
         List<DeliveryAgent> agents = new ArrayList<>();
+        
         try (BufferedReader reader = new BufferedReader(new FileReader(filePath))) 
         {
             String line;
+            // Skip the header line
+            reader.readLine(); 
+            
             while ((line = reader.readLine()) != null) 
             {
-                agents.add(DeliveryAgent.fromCSV(line));
+                DeliveryAgent agent = DeliveryAgent.fromCSV(line);
+                agents.add(agent);
             }
         } 
         catch (IOException e) 
         {
             System.out.println("Error reading from CSV: " + e.getMessage());
         }
+
         return agents;
     }
 }

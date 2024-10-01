@@ -4,7 +4,6 @@
  * such as adding, updating, deleting, listing, and searching agents. 
  * The application loads agent data from a CSV file on startup and saves it before exiting.
  */
-
 import java.util.List;
 import java.util.Scanner;
 import java.util.InputMismatchException;
@@ -96,7 +95,6 @@ public class Main
                         }
                     }
                     break;
-                
 
                 case 5:
                     // Save agents to CSV

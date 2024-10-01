@@ -10,6 +10,7 @@
  * - vehicleType: Describes the type of vehicle the agent uses 
  *   (e.g., bike, motorcycle, car, van, truck).
  * - availability: A boolean indicating whether the agent is currently available for deliveries.
+ * - id: The unique identifier for the delivery agent, starting from 1.
  * 
  * Methods:
  * - Getters and setters are used to ensure encapsulation, allowing for controlled 
@@ -18,9 +19,9 @@
  * - fromCSV: A static method that allows for the creation of a DeliveryAgent object 
  *   from a CSV line, facilitating CSV imports.
  */
-
 public class DeliveryAgent 
 {
+    private int id; // ID will be assigned during the CSV write process
     private String name;
     private String contactNumber;
     private String vehicleType;
@@ -76,16 +77,28 @@ public class DeliveryAgent
         this.availability = availability;
     }
 
+    public int getId() 
+    {
+        return id;
+    }
+
+    public void setId(int id) 
+    {
+        this.id = id;
+    }
+
     // Method to convert to CSV format
     public String toCSV() 
     {
-        return name + "," + contactNumber + "," + vehicleType + "," + availability;
+        return id + "," + name + "," + contactNumber + "," + vehicleType + "," + availability;
     }
 
     // Static method to create an agent from CSV
     public static DeliveryAgent fromCSV(String csvLine) 
     {
         String[] fields = csvLine.split(",");
-        return new DeliveryAgent(fields[0], fields[1], fields[2], Boolean.parseBoolean(fields[3]));
+        DeliveryAgent agent = new DeliveryAgent(fields[1], fields[2], fields[3], Boolean.parseBoolean(fields[4]));
+        agent.setId(Integer.parseInt(fields[0])); // Set the ID from the CSV
+        return agent;
     }
 }

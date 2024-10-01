@@ -12,7 +12,6 @@
  * The class is designed with extensibility in mind, allowing additional
  * operations to be added in the future (e.g., searching agents by name or vehicle type).
  */
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -28,69 +27,46 @@ public class DeliveryAgentManager
     // Register a new delivery agent
     public void addAgent(DeliveryAgent agent) 
     {
+        agent.setId(agents.size() + 1); // Assign ID starting from 1
         agents.add(agent);
-        System.out.println("Agent added successfully.");
     }
 
-    // Update an existing agent
+    // Update an existing delivery agent
     public void updateAgent(int index, DeliveryAgent updatedAgent) 
     {
-        if (index >= 0 && index < agents.size()) 
-        {
-            agents.set(index, updatedAgent);
-            System.out.println("Agent updated successfully.");
-        } 
-        else 
-        {
-            System.out.println("Invalid agent index.");
-        }
+        updatedAgent.setId(index + 1); // Update ID to match the agent's index
+        agents.set(index, updatedAgent);
     }
 
-    // Delete an agent
+    // Delete an existing delivery agent
     public void deleteAgent(int index) 
     {
         if (index >= 0 && index < agents.size()) 
         {
             agents.remove(index);
-            System.out.println("Agent deleted successfully.");
-        } 
-        else 
-        {
-            System.out.println("Invalid agent index.");
+            // Reassign IDs after deletion to keep them sequential
+            for (int i = index; i < agents.size(); i++) 
+            {
+                agents.get(i).setId(i + 1);
+            }
         }
+    }
+
+    // Get the list of agents
+    public List<DeliveryAgent> getAgents() 
+    {
+        return agents;
     }
 
     // Save agents to CSV
     public void saveToCSV(String filePath) 
     {
         CSVUtils.writeToCSV(filePath, agents);
-        System.out.println("Agents saved to CSV.");
     }
 
     // Load agents from CSV
     public void loadFromCSV(String filePath) 
     {
         agents = CSVUtils.readFromCSV(filePath);
-        System.out.println("Agents loaded from CSV.");
-    }
-
-    // Search agents by name
-    public List<DeliveryAgent> searchByName(String name) 
-    {
-        List<DeliveryAgent> result = new ArrayList<>();
-        for (DeliveryAgent agent : agents) 
-        {
-            if (agent.getName().equalsIgnoreCase(name)) 
-            {
-                result.add(agent);
-            }
-        }
-        return result;
-    }
-
-    // Get the list of agents (for displaying or further operations)
-    public List<DeliveryAgent> getAgents() 
-    {
-        return agents;
     }
 }
