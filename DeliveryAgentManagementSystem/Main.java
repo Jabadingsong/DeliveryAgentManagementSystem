@@ -1,178 +1,169 @@
 /**
- * The Main class serves as the entry point for the Delivery Agent Management System. 
- * It provides a user interface to manage delivery agents through various operations 
- * such as adding, updating, deleting, listing, and searching agents. 
- * The application loads agent data from a CSV file on startup and saves it before exiting.
+ * Main Application for Delivery Agent Management System
+ * 
+ * This program serves as the entry point for the Delivery Agent Management System.
+ * It presents a console-based interface that allows users to manage delivery agents,
+ * perform CRUD operations, search/filter, and handle file operations.
+ * 
+ * Features:
+ * - Menu-driven system with options for adding, viewing, editing, and deleting agents
+ * - Search and filter functionality based on agent attributes
+ * - Data persistence using CSV file handling
+ * 
+ * Author: OOP GROUP 7 
+ * Date: 10/14/2024
  */
-import java.util.List;
-import java.util.Scanner;
-import java.util.InputMismatchException;
 
-public class Main 
-{
-    public static void main(String[] args) 
-    {
-        Scanner scanner = new Scanner(System.in);
-        DeliveryAgentManager manager = new DeliveryAgentManager();
-
-        // Use the correct path to the data folder
-        String filePath = "C:\\Users\\Ezkylle Opiniano\\Desktop\\SchoolStuff\\1st Semester\\oop\\finals\\Final OOP Group 7\\DeliveryAgentManagementSystem\\Data\\agents.csv";
-        
-        // Load agents from CSV (if the file exists)
-        try {
-            manager.loadFromCSV(filePath);
-        } 
-        catch (Exception e) 
-        {
-            System.out.println("Failed to load data from CSV. Please check the file path.");
-        }
-        
-        boolean exit = false;
-
-        while (!exit) 
-        {
-            System.out.println("\nDelivery Agent Management System:");
-            System.out.println("1. Add Agent");
-            System.out.println("2. Update Agent");
-            System.out.println("3. Delete Agent");
-            System.out.println("4. List All Agents");
-            System.out.println("5. Save Agents to CSV");
-            System.out.println("6. Exit");
-            
-            int choice = -1;
-            // Loop to ensure valid integer input for menu selection
-            while (choice == -1) 
-            {
-                System.out.print("Choose an option: ");
-                try 
-                {
-                    choice = scanner.nextInt();
-                    scanner.nextLine();  // Consume newline after nextInt
-                } 
-                catch (InputMismatchException e) 
-                {
-                    System.out.println("Invalid input. Please enter a number between 1 and 6.");
-                    scanner.nextLine();  // Consume the invalid input
-                }
-            }
-
-            switch (choice) 
-            {
-                case 1:
-                    // Add a new agent
-                    DeliveryAgent newAgent = inputAgent(scanner);
-                    manager.addAgent(newAgent);
-                    break;
-
-                case 2:
-                    // Update an agent
-                    System.out.print("Enter agent index to update: ");
-                    int updateIndex = getValidIndex(scanner, manager.getAgents().size());
-                    DeliveryAgent updatedAgent = inputAgent(scanner);
-                    manager.updateAgent(updateIndex, updatedAgent);
-                    break;
-
-                case 3:
-                    // Delete an agent
-                    System.out.print("Enter agent index to delete: ");
-                    int deleteIndex = getValidIndex(scanner, manager.getAgents().size());
-                    manager.deleteAgent(deleteIndex);
-                    break;
-
-                case 4:
-                    // List all agents
-                    List<DeliveryAgent> agents = manager.getAgents();
-                    if (agents.isEmpty()) 
-                    {
-                        System.out.println("No agents available.");
-                    } 
-                    else 
-                    {
-                        System.out.println("ID,Name,Contact Number,Vehicle Type,Availability"); // Header for display
-                        for (int i = 0; i < agents.size(); i++) 
-                        {
-                            System.out.println((i + 1) + ": " + agents.get(i).toCSV());  // Start displaying agents from 1
-                        }
-                    }
-                    break;
-
-                case 5:
-                    // Save agents to CSV
-                    manager.saveToCSV(filePath);
-                    break;
-
-                case 6:
-                    // Exit the program
-                    System.out.println("Exiting program.");
-                    manager.saveToCSV(filePath);
-                    scanner.close();
-                    exit = true;
-                    break;
-
-                default:
-                    System.out.println("Invalid choice. Please try again.");
-            }
-        }
-    }
-
-    // Method to input agent details from the user
-    private static DeliveryAgent inputAgent(Scanner scanner) 
-    {
-        System.out.print("Enter agent name: ");
-        String name = scanner.nextLine();
-
-        System.out.print("Enter agent contact number: ");
-        String contactNumber = scanner.nextLine();
-
-        System.out.print("Enter vehicle type: ");
-        String vehicleType = scanner.nextLine();
-
-        boolean availability;
-        while (true) 
-        {
-            System.out.print("Is the agent available? (true/false): ");
-            String availabilityInput = scanner.nextLine();
-            if (availabilityInput.equalsIgnoreCase("true") || availabilityInput.equalsIgnoreCase("false")) 
-            {
-                availability = Boolean.parseBoolean(availabilityInput);
-                break;
-            } 
-            else 
-            {
-                System.out.println("Invalid input. Please enter 'true' or 'false'.");
-            }
-        }
-
-        System.out.print("Enter goods delivered by the agent: "); // Prompt for goods
-        String goods = scanner.nextLine(); // Get the goods input
-
-        // Pass the goods parameter to the DeliveryAgent constructor
-        return new DeliveryAgent(name, contactNumber, vehicleType, availability, goods);
-    }
-
-
-    // Method to validate and get a valid index for update/delete operations
-    private static int getValidIndex(Scanner scanner, int size) 
-    {
-        int index = -1;
-        while (index < 0 || index >= size) 
-        {
-            System.out.print("Enter a valid index: ");
-            try 
-            {
-                index = scanner.nextInt();
-                scanner.nextLine();  // Consume newline after nextInt
-                if (index < 0 || index >= size) 
-                {
-                    System.out.println("Index out of range. Please try again.");
-                }
-            } 
-            catch (InputMismatchException e) 
-            {
-                System.out.println("Invalid input. Please enter a valid number.");
-                scanner.nextLine();  // Consume the invalid input
-            }
-        }
-        return index;
-    }
-}
+ import java.util.List;
+ import java.util.Scanner;
+ 
+ // Main class to run the program
+ public class Main {
+     public static void main(String[] args) {
+         Scanner scanner = new Scanner(System.in);
+         DeliveryAgentManager manager = new DeliveryAgentManager();
+ 
+         // Update this to your specific path
+         String filePath = "C:\\Users\\Ezkylle Opiniano\\Desktop\\SchoolStuff\\1st Semester\\oop\\finals\\Final OOP Group 7\\DeliveryAgentManagementSystem\\Data\\agents.csv";
+ 
+         // Load agents from CSV
+         try {
+             manager.loadFromCSV(filePath);
+         } catch (Exception e) {
+             System.out.println("Failed to load data from CSV. Please check the file path.");
+         }
+ 
+         boolean exit = false;
+ 
+         while (!exit) {
+             System.out.println("\nDelivery Agent Management System:");
+             System.out.println("1. Add Agent");
+             System.out.println("2. Update Agent");
+             System.out.println("3. Delete Agent");
+             System.out.println("4. List All Agents");
+             System.out.println("5. Filter Agents by Vehicle Type");
+             System.out.println("6. Search Agents by Goods");
+             System.out.println("7. Save Agents to CSV");
+             System.out.println("8. Exit");
+ 
+             int choice = getValidChoice(scanner, 8);
+ 
+             switch (choice) {
+                 case 1:
+                     DeliveryAgent newAgent = inputAgent(scanner);
+                     manager.addAgent(newAgent);
+                     break;
+ 
+                 case 2:
+                     System.out.print("Enter agent index to update: ");
+                     int updateIndex = getValidIndex(scanner, manager.getAgents().size());
+                     DeliveryAgent updatedAgent = inputAgent(scanner);
+                     manager.updateAgent(updateIndex, updatedAgent);
+                     break;
+ 
+                 case 3:
+                     System.out.print("Enter agent index to delete: ");
+                     int deleteIndex = getValidIndex(scanner, manager.getAgents().size());
+                     manager.deleteAgent(deleteIndex);
+                     break;
+ 
+                 case 4:
+                     manager.displayAgents();
+                     break;
+ 
+                 case 5:
+                     System.out.print("Enter vehicle type to search: ");
+                     String vehicleType = scanner.nextLine();
+                     List<DeliveryAgent> foundAgents = manager.searchByVehicleType(vehicleType);
+                     if (foundAgents.isEmpty()) {
+                         System.out.println("No agents found for vehicle type: " + vehicleType);
+                     } else {
+                         for (DeliveryAgent agent : foundAgents) {
+                             System.out.println(agent.toCSV());
+                         }
+                     }
+                     break;
+ 
+                 case 6:
+                     System.out.print("Enter goods to filter: ");
+                     String goods = scanner.nextLine();
+                     List<DeliveryAgent> filteredAgents = manager.filterByGoods(goods);
+                     if (filteredAgents.isEmpty()) {
+                         System.out.println("No agents found for goods: " + goods);
+                     } else {
+                         for (DeliveryAgent agent : filteredAgents) {
+                             System.out.println(agent.toCSV());
+                         }
+                     }
+                     break;
+ 
+                 case 7:
+                     manager.saveToCSV(filePath);
+                     break;
+ 
+                 case 8:
+                     System.out.println("Exiting program.");
+                     manager.saveToCSV(filePath);
+                     scanner.close();
+                     exit = true;
+                     break;
+ 
+                 default:
+                     System.out.println("Invalid choice. Please try again.");
+             }
+         }
+     }
+ 
+     private static int getValidChoice(Scanner scanner, int maxChoice) {
+         int choice = -1;
+         while (choice < 1 || choice > maxChoice) {
+             System.out.print("Choose an option: ");
+             choice = scanner.nextInt();
+             scanner.nextLine();  // Consume newline
+             if (choice < 1 || choice > maxChoice) {
+                 System.out.println("Invalid input. Please enter a number between 1 and " + maxChoice + ".");
+             }
+         }
+         return choice;
+     }
+ 
+     private static DeliveryAgent inputAgent(Scanner scanner) {
+         System.out.print("Enter agent name: ");
+         String name = scanner.nextLine();
+         System.out.print("Enter contact number: ");
+         String contactNumber = scanner.nextLine();
+         System.out.print("Enter availability (true/false): ");
+         boolean availability = scanner.nextBoolean();
+         scanner.nextLine(); // Consume newline
+         System.out.print("Enter goods delivered: ");
+         String goods = scanner.nextLine();
+ 
+         // Option to choose vehicle type
+         System.out.println("Choose vehicle type:");
+         System.out.println("1. Bike");
+         System.out.println("2. Car");
+         // Add more vehicle types as needed
+ 
+         int vehicleChoice = getValidChoice(scanner, 2); // Adjust for number of options
+ 
+         if (vehicleChoice == 1) {
+             return new BikeDeliveryAgent(name, contactNumber, availability, goods);
+         } else {
+             return new CarDeliveryAgent(name, contactNumber, availability, goods);
+         }
+     }
+ 
+     private static int getValidIndex(Scanner scanner, int maxIndex) {
+         int index = -1;
+         while (index < 0 || index >= maxIndex) {
+             System.out.print("Enter index (0 to " + (maxIndex - 1) + "): ");
+             index = scanner.nextInt();
+             scanner.nextLine();  // Consume newline
+             if (index < 0 || index >= maxIndex) {
+                 System.out.println("Invalid input. Please enter a number between 0 and " + (maxIndex - 1) + ".");
+             }
+         }
+         return index;
+     }
+ }
+ 

@@ -1,84 +1,93 @@
 /**
- * The DeliveryAgentManager class manages a collection of delivery agents, 
- * providing CRUD (Create, Read, Update, Delete) operations.
+ * Delivery Agent Management System
  * 
- * It is responsible for:
- * - Registering new agents
- * - Updating existing agents based on their index in the list
- * - Deleting agents by index
- * - Saving agent data to a CSV file for persistence
- * - Loading agent data from a CSV file on application startup
+ * This program manages delivery agents and categorizes them by the type of goods they deliver
+ * and the vehicle they use (e.g., bike, motorcycle, car, van, truck). It implements
+ * object-oriented principles including inheritance and polymorphism. The system supports:
  * 
- * The class is designed with extensibility in mind, allowing additional
- * operations to be added in the future (e.g., searching agents by name or vehicle type).
+ * - CRUD operations (Create, Read, Update, Delete)
+ * - Search and filter functionality by agent's vehicle type and goods category
+ * - Data validation for input fields
+ * - File handling through CSV (data persistence)
+ * - Enhanced exception handling
+ * 
+ * Data is saved and loaded from a CSV file with category labels for easy viewing in Excel.
+ * 
+ * Author: OOP GROUP 7 
+ * Date: 10/14/2024
  */
-import java.util.ArrayList;
-import java.util.List;
 
-public class DeliveryAgentManager 
-{
-    private List<DeliveryAgent> agents;
-
-    public DeliveryAgentManager() 
-    {
-        this.agents = new ArrayList<>();
-    }
-
-    // Register a new delivery agent
-    public void addAgent(DeliveryAgent agent) 
-    {
-        agent.setId(agents.size() + 1); // Assign ID starting from 1
-        agents.add(agent);
-    }
-
-    // Update an existing delivery agent
-    public void updateAgent(int index, DeliveryAgent updatedAgent) 
-    {
-        updatedAgent.setId(index + 1); // Update ID to match the agent's index
-        agents.set(index, updatedAgent);
-    }
-
-    // Delete an existing delivery agent
-    public void deleteAgent(int index) 
-    {
-        if (index >= 0 && index < agents.size()) 
-        {
-            agents.remove(index);
-            // Reassign IDs after deletion to keep them sequential
-            for (int i = index; i < agents.size(); i++) 
-            {
-                agents.get(i).setId(i + 1);
-            }
-        }
-    }
-
-    // Get the list of agents
-    public List<DeliveryAgent> getAgents() 
-    {
-        return agents;
-    }
-
-    // Display agents with index starting from 1
-    public void displayAgents() 
-    {
-        System.out.println("Current Agents:");
-        for (int i = 0; i < agents.size(); i++) 
-        {
-            DeliveryAgent agent = agents.get(i);
-            // Display index starting from 1
-            System.out.println((i + 1) + ": " + agent.getName() + " - " + agent.getVehicleType() + " - " + agent.getGoods());
-        }
-    }
-
-    // Save agents to CSV
-    public void saveToCSV(String filePath) 
-    {
-        CSVUtils.writeToCSV(filePath, agents);
-    }
-
-    // Load agents from CSV
-    public void loadFromCSV(String filePath) 
-    {
-        agents = CSVUtils.readFromCSV(filePath);
-    }
-}
+ import java.util.ArrayList;
+ import java.util.List;
+ 
+ public class DeliveryAgentManager {
+     private List<DeliveryAgent> agents;
+ 
+     public DeliveryAgentManager() {
+         this.agents = new ArrayList<>();
+     }
+ 
+     public void addAgent(DeliveryAgent agent) {
+         agent.setId(agents.size() + 1); 
+         agents.add(agent);
+     }
+ 
+     public void updateAgent(int index, DeliveryAgent updatedAgent) {
+         updatedAgent.setId(index + 1); 
+         agents.set(index, updatedAgent);
+     }
+ 
+     public void deleteAgent(int index) {
+         if (index >= 0 && index < agents.size()) {
+             agents.remove(index);
+             for (int i = index; i < agents.size(); i++) {
+                 agents.get(i).setId(i + 1);
+             }
+         }
+     }
+ 
+     public List<DeliveryAgent> getAgents() {
+         return agents;
+     }
+ 
+     public void displayAgents() {
+         System.out.println("Current Agents:");
+         for (int i = 0; i < agents.size(); i++) {
+             DeliveryAgent agent = agents.get(i);
+             System.out.println((i + 1) + ": " + agent.toCSV());
+         }
+     }
+ 
+     public List<DeliveryAgent> searchByVehicleType(String vehicleType) {
+         List<DeliveryAgent> result = new ArrayList<>();
+         for (DeliveryAgent agent : agents) {
+             if (agent.getVehicleType().equalsIgnoreCase(vehicleType)) {
+                 result.add(agent);
+             }
+         }
+         return result;
+     }
+ 
+     public List<DeliveryAgent> filterByGoods(String goods) {
+         List<DeliveryAgent> result = new ArrayList<>();
+         for (DeliveryAgent agent : agents) {
+             if (agent.getGoods().equalsIgnoreCase(goods)) {
+                 result.add(agent);
+             }
+         }
+         return result;
+     }
+ 
+     public void saveToCSV(String filePath) {
+         if (CSVUtils.writeToCSV(filePath, agents)) { // Assuming writeToCSV returns a boolean indicating success
+             System.out.println("Agents saved successfully to " + filePath); // Success message
+         } else {
+             System.err.println("Error saving agents to file."); // Error message
+         }
+     }
+ 
+     public void loadFromCSV(String filePath) {
+         agents = CSVUtils.readFromCSV(filePath);
+     }
+ }
+ 
