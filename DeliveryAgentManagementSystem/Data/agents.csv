@@ -1,4 +1,4 @@
-ID,Name,Contact Number,Vehicle Type,Availability
-1,Ezkylle Opiniano,09876543210,Bike,true,Medicine
-2,Adrian San Pedro,0123456789,Car,false,Guitars
-3,Marco Manio,09998887777,Bike,false,Food
+ID,Name,Contact Number,Goods Type,Vehicle Type,Availability
+1,Ezkylle Opiniano,09998887777,CAR,ELECTRONICS,true
+2,Adrian Elijah San Pedro,07778889999,VAN,CLOTHING,false
+3,Marco Manio,09876543210,BIKE,FOOD,false
