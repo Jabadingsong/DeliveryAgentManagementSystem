@@ -1,59 +1,95 @@
 # DeliveryAgentManagementSystem
-OOP FINAL PROJECT 2ND YEAR 
+OOP Final Project - 2nd Year
+This console-based Delivery Agent Management System is developed in Java to manage delivery agents efficiently. The system allows for operations such as adding, updating, deleting, listing, and searching for agents, with data persistence through saving and loading agent information from a CSV file.
 
-This code is a console-based Delivery Agent Management System, written in Java. It helps manage delivery agents by storing their details, allowing for operations such as adding, updating, deleting, listing, and searching agents. The system also supports persistence by saving agent data to and loading it from a CSV file. Here's an explanation of the main components:
+## Table of Contents
+- DeliveryAgent Class
+- DeliveryAgentManager Class
+- CSVUtils Class
+- Main Class
+- GoodsType Class
+- VehicleType Class
+- How It Works
+
 
 ## 1. DeliveryAgent Class
-This class represents a delivery agent. It encapsulates key agent details such as:
+The DeliveryAgent class represents a delivery agent and encapsulates essential details:
 
+Attributes:
 - **name:** The full name of the agent.
 - **contactNumber:** The agent’s phone number.
-- **vehicleType:** Type of vehicle the agent uses (e.g., bike, car).
-- **availability:** A boolean value indicating whether the agent is available for deliveries.
-
+- **vehicleType:** The type of vehicle the agent uses (e.g., bike, car).
+- **availability:** A boolean indicating whether the agent is available for deliveries.
 ### Methods:
-- **Getters and Setters:** Control access to the agent's private attributes, following the encapsulation principle of OOP (Object-Oriented Programming).
-- **toCSV:** Converts the agent's details to a comma-separated string for easy CSV file storage.
-- **fromCSV:** A static method that converts a CSV-formatted string back into a DeliveryAgent object.
+- **Getters and Setters:** Control access to the agent's private attributes, following the encapsulation principle of OOP.
+- **toCSV():** Converts the agent's details to a comma-separated string for easy CSV storage.
+- **fromCSV(String csvLine):** A static method that converts a CSV-formatted string back into a DeliveryAgent object.
 
 ## 2. DeliveryAgentManager Class
-This class manages a list of delivery agents, providing CRUD operations (Create, Read, Update, Delete).
+The DeliveryAgentManager class manages a list of delivery agents and provides CRUD operations (Create, Read, Update, Delete).
 
 ### Attributes:
-- **agents:** A List of DeliveryAgent objects, representing all the agents currently managed.
+- **agents:** A List<DeliveryAgent> representing all currently managed agents.
 
 ### Methods:
 - **addAgent(DeliveryAgent agent):** Adds a new agent to the list.
 - **updateAgent(int index, DeliveryAgent updatedAgent):** Updates an agent's details based on the provided index.
 - **deleteAgent(int index):** Removes an agent from the list based on the index.
-- **saveToCSV(String filePath):** Saves the current list of agents to a CSV file using the CSVUtils.writeToCSV method.
-- **loadFromCSV(String filePath):** Loads agents from a CSV file into the agents list using the CSVUtils.readFromCSV method.
+- **saveToCSV(String filePath):** Saves the current list of agents to a CSV file.
+- **loadFromCSV(String filePath):** Loads agents from a CSV file into the agents list.
 - **searchByName(String name):** Searches agents by their name and returns a list of matching agents.
 - **getAgents():** Returns the list of agents for viewing or further operations.
 
 ## 3. CSVUtils Class
-This class handles reading and writing the agents' data to and from CSV files. It ensures the persistence of data between program sessions.
+The CSVUtils class handles the reading and writing of agents' data to and from CSV files, ensuring data persistence between program sessions.
 
 ### Methods:
-- **writeToCSV(String filePath, List<DeliveryAgent> agents):** Writes the list of agents to the specified CSV file. It uses a BufferedWriter for efficient file writing.
-- **readFromCSV(String filePath):** Reads agents from a CSV file and returns them as a list. It uses a BufferedReader to read the file line by line and converts each line into a DeliveryAgent object using the DeliveryAgent.fromCSV method.
+- **writeToCSV(String filePath, List<DeliveryAgent> agents):** Writes the list of agents to the specified CSV file using a BufferedWriter.
+- **readFromCSV(String filePath):** Reads agents from a CSV file and returns them as a list. It uses a BufferedReader to read the file line by line, converting each line into a DeliveryAgent object.
 
 ## 4. Main Class
-The Main class is the entry point of the application. It contains a menu-driven user interface that allows users to perform various operations on the delivery agents. It uses a Scanner for input.
+The Main class serves as the entry point for the application, providing a menu-driven user interface that allows users to perform various operations on the delivery agents.
 
 ### Key Operations:
-- **Add Agent:** Collects the agent's details from the user and adds the agent to the list using manager.addAgent.
+- **Add Agent:** Collects agent details from the user and adds the agent to the list.
 - **Update Agent:** Allows the user to update an existing agent's details by specifying its index.
 - **Delete Agent:** Removes an agent based on its index.
 - **List All Agents:** Displays all agents, showing their details in CSV format.
-- **Save Agents to CSV:** Saves the current agent list to the CSV file.
-- **Exit:** Exits the application and automatically saves all changes to the CSV file.
+- **Save Agents to CSV:** Saves the current agent list to a CSV file.
+- **Exit:** Exits the application and saves all changes to the CSV file.
+
+## 5. GoodsType Class
+The GoodsType class enumerates the different types of goods that can be delivered by agents, providing a structured way to categorize delivery items.
+
+### Methods:
+- **getGoodsTypes():** Returns a list of available goods types for reference or selection.
+- **toString():** Provides a string representation of the goods type.
+
+## 6. VehicleType Class
+The VehicleType class enumerates the various types of vehicles used by delivery agents, ensuring consistency in the vehicle categorization process.
+
+### Methods:
+- **getVehicleTypes():** Returns a list of available vehicle types for reference or selection.
+- **toString():** Provides a string representation of the vehicle type.
+
+## 7. How It Works
+When the program starts, it attempts to load existing agents from the agents.csv file. If the file is found, the agents are loaded into the system; otherwise, the application begins with an empty list.
+
+### User Interface:
+The application presents a menu-driven interface that allows users to choose from various operations. Users can:
+
+- **Add New Agents:** The system prompts for necessary details, which are then validated before being added to the list.
+- **Update Existing Agents:** Users can select an agent by index and modify their details as needed.
+- **Delete Agents:** Agents can be removed from the list based on their index.
+- **List All Agents:** Displays all agents currently managed, formatted in CSV style for easy readability.
+- **Save Changes:** Users can manually save the current state of agents to the CSV file at any time, ensuring data persistence.
+- **Exit:** When exiting, the system automatically saves all changes to the CSV file, preserving the current state for future sessions.
 
 ### Key Functionalities:
-- **Data Persistence:** Agent information is loaded from and saved to a CSV file using the CSVUtils class. This ensures that data persists even after the program is closed.
-- **Encapsulation:** Attributes like name, contactNumber, vehicleType, and availability are private, and getters/setters are provided for controlled access.
-- **Static Methods:** The DeliveryAgent class has a static method fromCSV to create DeliveryAgent objects from a CSV string, which helps load agents from the file easily.
-- **Error Handling:** Both reading and writing CSV files are wrapped in try-catch blocks to handle any potential I/O errors and keep the program from crashing unexpectedly.
 
-## How It Works:
-When the program starts, it attempts to load existing agents from the `agents.csv` file. The user is presented with a menu to manage the agents: add new agents, update existing ones, delete them, or list them. The system saves the changes to the CSV file, either upon exiting or explicitly when the user chooses to do so. This structure promotes modularity and extensibility, allowing for further additions like filtering agents by vehicle type or expanding to include more attributes.
+- **Data Persistence:** The agent information is loaded from and saved to a CSV file, ensuring data persists across sessions.
+- **Encapsulation:** Private attributes like name, contactNumber, vehicleType, and availability are accessed via getters/setters.
+- **Static Methods:** The fromCSV method helps load agents from a CSV string, simplifying data retrieval.
+- **Error Handling:** Both reading and writing operations are wrapped in try-catch blocks to handle potential I/O errors gracefully, preventing program crashes.
+
+This structure promotes modularity and extensibility, allowing for future enhancements like filtering agents by vehicle type or adding more attributes.
