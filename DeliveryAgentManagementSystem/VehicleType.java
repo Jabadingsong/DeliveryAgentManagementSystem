@@ -1,17 +1,27 @@
 /**
- * VehicleType Enum
+ * VehicleType Class
  * 
- * This enumeration defines the various types of vehicles that can be used 
- * by delivery agents in the Delivery Agent Management System.
+ * This class defines a list of vehicle types that can be used by delivery agents 
+ * in the Delivery Agent Management System. It provides functionality to validate 
+ * vehicle types and retrieve all available types.
  * 
  * Author: OOP GROUP 7 
  * Date: 10/19/2024
  */
-public enum VehicleType 
-{
-    BIKE,        // Represents a bicycle used for deliveries
-    MOTORCYCLE,  // Represents a motorcycle used for deliveries
-    CAR,         // Represents a car used for deliveries
-    VAN,         // Represents a van used for deliveries
-    TRUCK;       // Represents a truck used for larger deliveries
+
+ import java.util.Arrays;
+ import java.util.List;
+ 
+ public class VehicleType {
+    private final List<String> vehicleTypes = Arrays.asList("Bike", "Motorcycle", "Car", "Van", "Truck");
+
+    public boolean isValidVehicleType(String vehicleType) {
+        return vehicleTypes.stream().anyMatch(v -> v.equalsIgnoreCase(vehicleType));
+    }
+
+    public List<String> getAllVehicleTypes() {
+        return vehicleTypes;
+    }
 }
+
+ 

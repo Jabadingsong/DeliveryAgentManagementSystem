@@ -9,102 +9,77 @@
  * Date: 10/14/2024
  */
 
-public class DeliveryAgent 
-{
-    private int id;  // Unique identifier for the delivery agent
-    private String name;  // Name of the delivery agent
-    private String contactNumber;  // Contact number for the delivery agent
-    private boolean availability;  // Availability status of the delivery agent (true if available, false otherwise)
-    private GoodsType goods;  // Type of goods the agent is responsible for delivering
-    private VehicleType vehicleType;  // Type of vehicle the agent uses for deliveries
+public class DeliveryAgent extends Person {
+    private int agentID;
+    private String vehicleType;
+    private String goodsType;
+    private boolean availability;
 
-    /**
-     * Constructor to initialize a new DeliveryAgent object.
-     * 
-     * @param name The name of the delivery agent
-     * @param contactNumber The contact number of the delivery agent
-     * @param availability The availability status of the delivery agent
-     * @param goods The type of goods the delivery agent handles
-     * @param vehicleType The type of vehicle the delivery agent uses
-     */
-    public DeliveryAgent(String name, String contactNumber, boolean availability, GoodsType goods, VehicleType vehicleType) 
-    {
-        this.name = name;
-        this.contactNumber = contactNumber;
-        this.availability = availability;
-        this.goods = goods;
+    public DeliveryAgent(int agentID, String name, long contactNumber, String vehicleType, String goodsType, boolean availability) {
+        super(name, contactNumber);
+        this.agentID = agentID;
         this.vehicleType = vehicleType;
+        this.goodsType = goodsType;
+        this.availability = availability;
     }
 
-    // Getter for the agent ID
-    public int getId() 
-    {
-        return id;
+    public int getAgentID() {
+        return agentID;
     }
 
-    // Setter for the agent ID
-    public void setId(int id) 
-    {
-        this.id = id;
-    }
-
-    // Getter for the agent's name
-    public String getName() 
-    {
-        return name;
-    }
-
-    // Getter for the agent's contact number
-    public String getContactNumber() 
-    {
-        return contactNumber;
-    }
-
-    // Method to check if the agent is available
-    public boolean isAvailable() 
-    {
-        return availability;
-    }
-
-    // Getter for the type of goods the agent handles
-    public GoodsType getGoods() 
-    {
-        return goods;
-    }
-
-    // Getter for the type of vehicle the agent uses
-    public VehicleType getVehicleType() 
-    {
+    public String getVehicleType() {
         return vehicleType;
     }
 
-    /**
-     * Converts the DeliveryAgent object to a CSV string format for easy storage and retrieval.
-     * 
-     * @return A CSV string representation of the DeliveryAgent object
-     */
-    public String toCSV() 
-    {
-        return id + "," + name + "," + contactNumber + "," + vehicleType + "," + goods + "," + availability;
+    public void setVehicleType(String vehicleType) {
+        this.vehicleType = vehicleType;
     }
 
-    /**
-     * Static method to create a DeliveryAgent object from a CSV string.
-     * 
-     * @param csvLine A CSV string representing a delivery agent
-     * @return A DeliveryAgent object constructed from the CSV string
-     */
-    public static DeliveryAgent fromCSV(String csvLine) 
-    {
-        String[] tokens = csvLine.split(","); // Split the CSV line into individual tokens
-        DeliveryAgent agent = new DeliveryAgent(
-            tokens[1], // name
-            tokens[2], // contact number
-            Boolean.parseBoolean(tokens[4]), // availability
-            GoodsType.valueOf(tokens[3].toUpperCase()), // goods
-            VehicleType.valueOf(tokens[3].toUpperCase()) // vehicleType (if applicable)
-        );
-        agent.setId(Integer.parseInt(tokens[0])); // Set the ID from the first token
-        return agent; // Return the constructed DeliveryAgent object
+    public String getGoodsType() {
+        return goodsType;
+    }
+
+    public void setGoodsType(String goodsType) {
+        this.goodsType = goodsType;
+    }
+
+    public boolean isAvailability() {
+        return availability;
+    }
+
+    public void setAvailability(boolean availability) {
+        this.availability = availability;
+    }
+
+    public void updateAgentDetails(String name, long contactNumber, String vehicleType, String goodsType) {
+        setName(name);
+        setContactNumber(contactNumber);
+        setVehicleType(vehicleType);
+        setGoodsType(goodsType);
+    }
+
+    @Override
+    public String toString() {
+        return "Agent ID: " + agentID + "\n" +
+        "Name: " + getName() + "\n" +
+        "Contact Number: " + getContactNumber() + "\n" +
+        "Vehicle Type: " + getVehicleType() + "\n" +
+        "Goods Type: " + getGoodsType() + "\n" +
+        "Availability: " + isAvailability();
+    }
+    
+    public static DeliveryAgent fromCSV(String csvLine) {
+        String[] fields = csvLine.split(","); // Split the line by commas
+
+        // Assuming fields are in the same order as the header
+        int id = Integer.parseInt(fields[0].trim());
+        String name = fields[1].trim();
+        int contact = Integer.parseInt(fields[2].trim());
+        String goods = fields[3].trim();
+        String vehicle = fields[4].trim();
+        boolean availability = Boolean.parseBoolean(fields[5].trim());
+
+        return new DeliveryAgent(id, name, contact, goods, vehicle, availability);
     }
 }
+

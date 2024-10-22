@@ -11,147 +11,85 @@
 import java.util.ArrayList;
 import java.util.List;
 
-public class DeliveryAgentManager 
-{
-    // List to hold DeliveryAgent objects
-    private List<DeliveryAgent> agents;
+public class DeliveryAgentManager {
+    private List<DeliveryAgent> agentsList = new ArrayList<>();
+    private String csvFilePath;
 
-    // Constructor to initialize the agents list
-    public DeliveryAgentManager() 
-    {
-        this.agents = new ArrayList<>();
+    // Constructor to initialize the CSV file path and load agents from CSV
+    public DeliveryAgentManager(String csvFilePath) {
+        this.csvFilePath = csvFilePath;
+        loadAgentsFromCSV(); // Load agents from the CSV file during initialization
     }
 
-    /**
-     * Adds a new delivery agent to the list.
-    * The ID is automatically set based on the current size of the list.
-    * 
-    * @param agent The DeliveryAgent object to be added.
-    */
-    public void addAgent(DeliveryAgent agent) 
-    {
-        agent.setId(agents.size() + 1); // Set the ID based on the current list size
-        agents.add(agent); // Add the agent to the list
+    // Load agents from the CSV file
+    private void loadAgentsFromCSV() {
+        agentsList = CSVUtils.readFromCSV(csvFilePath);
     }
 
-    /**
-     * Updates an existing delivery agent in the list.
-    * The ID of the updated agent is set based on its position in the list.
-    * 
-    * @param index The index of the agent to be updated.
-    * @param updatedAgent The new DeliveryAgent object with updated information.
-    */
-    public void updateAgent(int index, DeliveryAgent updatedAgent) 
-    {
-        updatedAgent.setId(index + 1); // Set the ID based on the index
-        agents.set(index, updatedAgent); // Replace the existing agent with the updated agent
+    // Save agents to the CSV file
+    public void saveAgentsToCSV() {
+        if (CSVUtils.writeToCSV(csvFilePath, agentsList)) {
+            System.out.println("Agents saved successfully to CSV.");
+        } else {
+            System.out.println("Error saving agents to CSV.");
+        }
     }
 
-    /**
-     * Deletes a delivery agent from the list by index.
-    * After removal, the IDs of subsequent agents are updated to maintain consistency.
-    * 
-    * @param index The index of the agent to be deleted.
-    */
-    public void deleteAgent(int index) 
-    {
-        if (index >= 0 && index < agents.size()) 
-        { // Check if index is valid
-            agents.remove(index); // Remove the agent at the specified index
-            // Update IDs of subsequent agents
-            for (int i = index; i < agents.size(); i++) 
-            {
-                agents.get(i).setId(i + 1); // Reset IDs to maintain order
+    public void addAgent(DeliveryAgent agent) {
+        agentsList.add(agent);
+    }
+
+    public void removeAgent(int agentID) {
+        DeliveryAgent agent = getAgentById(agentID);
+        if (agent != null) {
+            agentsList.remove(agent);
+            System.out.println("Agent removed successfully.");
+        } else {
+            System.out.println("Error: Agent ID not found.");
+        }
+    }
+
+    public DeliveryAgent getAgentById(int agentID) {
+        for (DeliveryAgent agent : agentsList) {
+            if (agent.getAgentID() == agentID) {
+                return agent;
             }
         }
+        return null;
     }
 
-    /**
-     * Returns the list of all delivery agents.
-    * 
-    * @return List of DeliveryAgent objects.
-    */
-    public List<DeliveryAgent> getAgents() 
-    {
-        return agents; // Return the list of agents
-    }
-
-    /**
-     * Displays the current list of agents in the console.
-    * Each agent's details are printed in CSV format.
-    */
-    public void displayAgents() 
-    {
-        System.out.println("Current Agents:");
-        for (int i = 0; i < agents.size(); i++) 
-        {
-            DeliveryAgent agent = agents.get(i);
-            System.out.println((i) + ": " + agent.toCSV()); // Display each agent
+    public void updateAgent(int agentID, String name, long contactNumber, String vehicleType, String goodsType) {
+        DeliveryAgent agent = getAgentById(agentID);
+        if (agent != null) {
+            agent.updateAgentDetails(name, contactNumber, vehicleType, goodsType);
+            System.out.println("Agent updated successfully.");
+        } else {
+            System.out.println("Error: Agent ID not found.");
         }
     }
 
-    /**
-     * Searches for agents by their vehicle type.
-    * 
-    * @param vehicleType The VehicleType to filter agents by.
-    * @return A list of DeliveryAgent objects that match the specified vehicle type.
-    */
-    public List<DeliveryAgent> searchByVehicleType(VehicleType vehicleType) 
-    {
-        List<DeliveryAgent> result = new ArrayList<>();
-        for (DeliveryAgent agent : agents) 
-        {
-            if (agent.getVehicleType() == vehicleType) 
-            { // Check if the vehicle type matches
-                result.add(agent); // Add matching agents to the result list
+    public List<DeliveryAgent> getAllAgents() {
+        return agentsList;
+    }
+    
+    public List<DeliveryAgent> filterByVehicleType(String vehicleType) {
+        List<DeliveryAgent> filteredAgents = new ArrayList<>();
+        for (DeliveryAgent agent : agentsList) {
+            if (agent.getVehicleType().equalsIgnoreCase(vehicleType)) {
+                filteredAgents.add(agent);
             }
         }
-        return result; // Return the filtered list
+        return filteredAgents;
     }
 
-    /**
-     * Filters agents by the type of goods they deliver.
-    * 
-    * @param goods The GoodsType to filter agents by.
-    * @return A list of DeliveryAgent objects that match the specified goods type.
-    */
-    public List<DeliveryAgent> filterByGoods(GoodsType goods) 
-    {
-        List<DeliveryAgent> result = new ArrayList<>();
-        for (DeliveryAgent agent : agents) 
-        {
-            if (agent.getGoods() == goods) 
-            { // Check if the goods type matches
-                result.add(agent); // Add matching agents to the result list
+    public List<DeliveryAgent> searchByGoodsType(String goodsType) {
+        List<DeliveryAgent> searchedAgents = new ArrayList<>();
+        for (DeliveryAgent agent : agentsList) {
+            if (agent.getGoodsType().equalsIgnoreCase(goodsType)) {
+                searchedAgents.add(agent);
             }
         }
-        return result; // Return the filtered list
+        return searchedAgents;
     }
 
-    /**
-     * Saves the current list of agents to a specified CSV file.
-    * 
-    * @param filePath The path to the CSV file where the agents will be saved.
-    */
-    public void saveToCSV(String filePath) 
-    {
-        if (CSVUtils.writeToCSV(filePath, agents)) 
-        { // Attempt to write to the CSV file
-            System.out.println("Agents saved successfully to " + filePath); // Success message
-        } 
-        else 
-        {
-            System.err.println("Error saving agents to file."); // Error message
-        }
-    }
-
-    /**
-     * Loads delivery agents from a specified CSV file into the manager.
-    * 
-    * @param filePath The path to the CSV file from which agents will be loaded.
-    */
-    public void loadFromCSV(String filePath) 
-    {
-        agents = CSVUtils.readFromCSV(filePath); // Read agents from the CSV file
-    }
 }

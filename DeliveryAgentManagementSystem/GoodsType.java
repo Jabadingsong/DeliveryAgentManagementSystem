@@ -1,17 +1,32 @@
 /**
- * GoodsType Enum
+ * Goods Class
  * 
- * This enumeration defines the various types of goods that delivery agents
- * may handle in the Delivery Agent Management System.
+ * This class defines a list of goods types that can be handled by delivery agents
+ * in the Delivery Agent Management System. It provides functionality to validate
+ * goods types and retrieve all available types.
  * 
  * Author: OOP GROUP 7 
  * Date: 10/19/2024
  */
-public enum GoodsType 
-{
-    FOOD,        // Represents food items that can be delivered
-    MEDICINE,    // Represents medicinal products that can be delivered
-    CLOTHING,    // Represents clothing items that can be delivered
-    ELECTRONICS, // Represents electronic devices and gadgets that can be delivered
-    FURNITURE;   // Represents furniture items that can be delivered
-}
+
+import java.util.Arrays;
+import java.util.List;
+ 
+public class GoodsType {
+     private final List<String> goodsTypes = Arrays.asList("Food", "Medicine", "Furniture", "Livestock", "Clothing", 
+                                                                "Jewelry", "Tech Products", "Games", "Customized Products", "Toys");
+ 
+    public boolean isValidGoodsType(String goodsType, boolean ignoreCase) {
+        if (ignoreCase) {
+            return goodsTypes.stream().map(String::toLowerCase).anyMatch(type -> type.equals(goodsType.toLowerCase()));
+        } 
+        else 
+        {
+            return goodsTypes.contains(goodsType);
+        }
+    }
+
+    public List<String> getAllGoodsTypes() {
+        return goodsTypes;
+    }
+} 

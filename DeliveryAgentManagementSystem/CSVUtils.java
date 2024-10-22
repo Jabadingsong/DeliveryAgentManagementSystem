@@ -25,28 +25,30 @@ public class CSVUtils {
     * @param agents   The list of DeliveryAgent objects to be written to the file.
     * @return boolean indicating success (true) or failure (false) of the operation.
     */
-    public static boolean writeToCSV(String filePath, List<DeliveryAgent> agents) 
-    {
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter(filePath))) 
-        {
-            // Write the header line for the CSV
-            writer.write("ID,Name,Contact Number,Goods Type,Vehicle Type,Availability");
-            writer.newLine();
-    
-            // Write each DeliveryAgent's data to the CSV file
-            for (DeliveryAgent agent : agents) 
-            {
-                writer.write(agent.toCSV());
-                writer.newLine();
-            }
-            return true; // Indicate successful write operation
-        } 
-        catch (IOException e) 
-        {
-            System.out.println("Error writing to CSV: " + e.getMessage());
-            return false; // Indicate failure in writing
-        }
-    }
+	public static boolean writeToCSV(String filePath, List<DeliveryAgent> agents) {
+	    try (BufferedWriter writer = new BufferedWriter(new FileWriter(filePath))) {
+	        // Write the header line for the CSV
+	        writer.write("ID,Name,Contact Number,Goods Type,Vehicle Type,Availability");
+	        writer.newLine();
+
+	        // Write each agent's details to the CSV
+	        for (DeliveryAgent agent : agents) {
+	            writer.write(String.format("%d,%s,%d,%s,%s,%b",
+	                    agent.getAgentID(),
+	                    agent.getName(),
+	                    agent.getContactNumber(),
+	                    agent.getGoodsType(),
+	                    agent.getVehicleType(),
+	                    agent.isAvailability()));
+	            writer.newLine();
+	        }
+	        return true; // Successful write
+	    } catch (IOException e) {
+	        System.out.println("Error writing to CSV: " + e.getMessage());
+	        return false; // Failed write
+	    }
+	}
+
 
     /**
      * Reads DeliveryAgent data from a specified CSV file.
