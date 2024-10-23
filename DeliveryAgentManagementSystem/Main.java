@@ -3,27 +3,30 @@
  * 
  * This program serves as the entry point for the Delivery Agent Management System.
  * It provides a console-based interface that allows users to manage delivery agents,
- * perform CRUD operations, search/filter agents, and handle file operations for data persistence.
+ * perform CRUD operations (Create, Read, Update, Delete), search/filter agents, and handle
+ * file operations for data persistence.
  * 
  * Features:
- * - Menu-driven system with options for adding, viewing, editing, and deleting agents
- * - Search functionality by vehicle type and filter by goods type
- * - Data persistence through CSV file handling
+ * - Menu-driven system with options for adding, viewing, updating, and deleting agents
+ * - Filter agents by vehicle type and search by goods type
+ * - Data persistence using CSV file handling for loading and saving agent information
  * 
- * Author: OOP GROUP 7 
+ * Author: OOP GROUP 7
  * Date: 10/14/2024
  */
 
 import java.util.List;
 
 public class Main {
-    public static void main(String[] args) {
+    public static void main(String[] args) 
+    {
         String filePath = "C:\\Users\\Ezkylle Opiniano\\Desktop\\SchoolStuff\\1st Semester\\oop\\finals\\Final OOP Group 7\\DeliveryAgentManagementSystem\\Data\\agents.csv"; // Update with your CSV file path
         DeliveryAgentManager agentManager = new DeliveryAgentManager(filePath);
         UserInterface userInterface = new UserInterface();
 
         boolean running = true;
-        while (running) {
+        while (running) 
+        {
             userInterface.displayMenu();
             String choice = userInterface.getUserInput();
 
@@ -33,26 +36,33 @@ public class Main {
                     agentManager.saveAgentsToCSV(); // Save after adding
                     break;
                 case "2": // Updating
-                    try {
+                    try 
+                    {
                         System.out.print("Enter Agent's ID to update: ");
                         int updateID = Integer.parseInt(userInterface.getUserInput());
-                        if (agentManager.getAgentById(updateID) == null) {
-                            System.out.println("Agent ID not found.");
+                        if (agentManager.getAgentById(updateID) == null) 
+                        {
+                            userInterface.displayErrorMessage("Agent ID not found.");
                             break;
                         }
                         userInterface.handleUpdate(agentManager, updateID);
                         agentManager.saveAgentsToCSV(); // Save after updating
-                    } catch (NumberFormatException e) {
+                    }
+                    catch (NumberFormatException e) 
+                    {
                         userInterface.displayErrorMessage("Invalid input. Please enter a valid number.");
                     }
                     break;
                 case "3": // Deleting
-                    try {
+                    try 
+                    {
                         System.out.print("Enter Agent's ID to delete: ");
                         int deleteID = Integer.parseInt(userInterface.getUserInput());
                         agentManager.removeAgent(deleteID);
                         agentManager.saveAgentsToCSV(); // Save after deleting
-                    } catch (NumberFormatException e) {
+                    } 
+                    catch (NumberFormatException e) 
+                    {
                         userInterface.displayErrorMessage("Invalid input. Please enter a valid number.");
                     }
                     break;
