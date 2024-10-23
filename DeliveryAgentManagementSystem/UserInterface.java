@@ -178,7 +178,7 @@ public class UserInterface
             System.out.print("Enter new name: ");
             String name = capitalizeString(getUserInput());
 
-            System.out.print("Enter new contact number: ");
+            System.out.print("Enter new contact number (Minimum of 10 Number like 9876543210): ");
             String contactNumber = getUserInput();
 
             System.out.print("Enter new vehicle type [Bike, Motorcycle, Car, Van, Truck]: ");
