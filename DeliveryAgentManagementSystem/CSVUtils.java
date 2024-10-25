@@ -34,7 +34,7 @@ public class CSVUtils
 				writer.write(String.format("%d,%s,%s,%s,%s,%b",
 						agent.getAgentID(),
 						agent.getName(),
-						agent.getContactNumber(), // Now as String
+						agent.getContactNumber(),
 						agent.getGoodsType(),
 						agent.getVehicleType(),
 						agent.isAvailability()));

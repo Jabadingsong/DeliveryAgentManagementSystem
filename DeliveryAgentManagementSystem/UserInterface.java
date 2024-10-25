@@ -22,7 +22,7 @@ import java.util.List;
 public class UserInterface 
 {
     private Scanner scanner = new Scanner(System.in);
-    private GoodsType goodsTypeObj = new GoodsType(); // Correct instance for goods type
+    private GoodsType goodsTypeObj = new GoodsType(); 
     private VehicleType vehicle = new VehicleType();
 
     public void displayMenu() 
@@ -81,7 +81,7 @@ public class UserInterface
                     break;
                 case "8":
                     System.out.println("Exiting...");
-                    scanner.close(); // Close scanner here before exiting
+                    scanner.close();
                     return;
                 default:
                     System.out.println("Invalid choice. Please enter a number between 1 and 8.");
@@ -161,7 +161,8 @@ public class UserInterface
     {
         if (str == null || str.isEmpty()) return str; // Handle empty input
         String[] words = str.split(" ");
-        for (int i = 0; i < words.length; i++) {
+        for (int i = 0; i < words.length; i++) 
+        {
             if (!words[i].isEmpty()) 
             { // Check for empty words
                 words[i] = words[i].substring(0, 1).toUpperCase() + words[i].substring(1).toLowerCase();
